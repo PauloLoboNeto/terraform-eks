@@ -1,1 +1,1 @@
-ACTION=destroy
+ACTION=create
