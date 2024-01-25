@@ -39,3 +39,8 @@ module "nodes" {
       min = var.auto_scale_options.min
     }
 }
+
+# module "helm" {
+#     source = "./modules/helm"
+#     cluster_name = var.cluster_name
+# }
