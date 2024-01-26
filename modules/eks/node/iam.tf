@@ -53,3 +53,8 @@ resource "aws_iam_role_policy_attachment" "secrets_manager" {
   policy_arn = aws_iam_policy.secrets_manager_policy.arn
   role = aws_iam_role.eks_nodes_roles.name
 }
+
+resource "aws_iam_role_policy_attachment" "autoscaling" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2AutoScalingFullAccess"
+  role       = aws_iam_role.eks_nodes_roles.name
+}
