@@ -29,6 +29,36 @@ resource "aws_iam_policy" "secrets_manager_policy" {
   })
 }
 
+resource "aws_iam_policy" "sqs_manager_policy" {
+  name        = "sqs-manager-policy"
+  
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = ["sqs:*"],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "sns_manager_policy" {
+  name        = "sns-manager-policy"
+  
+  policy = jsonencode({
+    Version: "2012-10-17",
+    Statement: [
+        {
+          Action: ["sns:*"],
+          Effect: "Allow",
+          Resource: "*"
+        }
+    ]
+  })
+}
+
 resource "aws_iam_role" "eks_nodes_roles" {
     name = format("%s-eks-nodes", var.cluster_name)
     assume_role_policy = data.aws_iam_policy_document.eks_nodes_role.json
@@ -51,6 +81,16 @@ resource "aws_iam_role_policy_attachment" "ecr" {
 
 resource "aws_iam_role_policy_attachment" "secrets_manager" {
   policy_arn = aws_iam_policy.secrets_manager_policy.arn
+  role = aws_iam_role.eks_nodes_roles.name
+}
+
+resource "aws_iam_role_policy_attachment" "sqs_manager" {
+  policy_arn = aws_iam_policy.sqs_manager_policy.arn
+  role = aws_iam_role.eks_nodes_roles.name
+}
+
+resource "aws_iam_role_policy_attachment" "sns_manager" {
+  policy_arn = aws_iam_policy.sns_manager_policy.arn
   role = aws_iam_role.eks_nodes_roles.name
 }
 
